@@ -19,6 +19,17 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
+    - name: Install .NET Framework 4.6.2 Developer Pack
+      run: |
+        # Download the offline installer
+        Invoke-WebRequest -Uri 'https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net462-developer-pack-offline-installer' -OutFile 'dotnet-framework-462-devpack.exe'
+
+        # Install the developer pack
+        Start-Process -Wait -FilePath 'dotnet-framework-462-devpack.exe'
+
+        # Add the developer pack's tools to the PATH
+        $env:PATH += ';C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.2 Tools\'
+
     - name: Restore Dependencies
       run: dotnet restore
 
@@ -33,4 +44,3 @@ jobs:
       with:
         name: compiled-artifacts
         path: ./publish
-
