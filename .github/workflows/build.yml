@@ -1,0 +1,36 @@
+name: Build VB.NET Program
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build -c Release
+
+    - name: Publish
+      run: dotnet publish -c Release -o publish
+
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: compiled-artifacts
+        path: ./publish
+
